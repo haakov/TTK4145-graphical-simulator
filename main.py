@@ -1,5 +1,6 @@
 import pyglet
 import socket, sys
+import random
 
 from pyglet.window import key,mouse
 from threading import Thread, RLock
@@ -13,6 +14,7 @@ class ElevatorServer():
     order_keys   = Resources.order_keys
 
     def __init__(self, index, x, y, parent):
+        elev_y = random.randrange(self.floor_positions[0], self.floor_positions[-1])
         self.lock = RLock()
         self.batch = pyglet.graphics.Batch()
 
@@ -34,32 +36,32 @@ class ElevatorServer():
 
         for i in range(3):
             self.hall_up_orders.append(pyglet.sprite.Sprite(Resources.arrow_img,
-                    x=x-15, y=self.floor_positions[i], batch=self.batch))
+                    x=x-15, y=self.floor_positions[i]+14, batch=self.batch))
             self.hall_up_orders[i].opacity = 80
 
         for i in range(1, 4):
             self.hall_down_orders.append(pyglet.sprite.Sprite(Resources.arrow_down_img,
-                    x=x-15, y=self.floor_positions[i]-15, batch=self.batch))
+                    x=x-15, y=self.floor_positions[i]-6, batch=self.batch))
             self.hall_down_orders[i-1].opacity = 80
 
         for i in range(4):
             self.cab_orders.append(pyglet.sprite.Sprite(Resources.cab_order_imgs[i],
-                    x=x, y=y - 20, batch=self.batch))
+                    x=x-50, y=y - 20, batch=self.batch))
             self.cab_orders[i].opacity = 80
 
         # Create sprites for the elevator
-        self.elevator = pyglet.sprite.Sprite(Resources.elevator_img, x, y, batch=self.batch)
+        self.elevator = pyglet.sprite.Sprite(Resources.elevator_img, x, elev_y, batch=self.batch)
         self.elevator.dy = 0.0
 
         self.doors = pyglet.sprite.Sprite(Resources.doors_img,
-                x=x + 5, y=y + 5)
+                x=x + 5, y=elev_y + 5)
 
         self.stop_button = pyglet.sprite.Sprite(Resources.stop_img,
-                x=x + 8, y=y + 10)
+                x=x + 8, y=elev_y + 10)
         self.stop_button.visible = False
 
         self.signal = pyglet.sprite.Sprite(Resources.signal_img,
-                x=x, y=y, batch=self.batch)
+                x=x, y=elev_y, batch=self.batch)
         self.signal.visible = False
 
         # Start the networking thread
@@ -125,7 +127,7 @@ class ElevatorServer():
         return self.window.keys[self.order_keys[self.index][button_type][3-floor]]
 
 def recv_on_port(parent, index, port):
-    def serve(conn):
+    def serve(conn, addr):
         while parent.active:
             try:
                 data = conn.recv(buf_size).strip()
@@ -164,6 +166,7 @@ def recv_on_port(parent, index, port):
             except socket.timeout:
                 continue
             except ConnectionResetError:
+                print("Connection lost: " + str(addr))
                 break
 
     localhost = '127.0.0.1'
@@ -180,10 +183,9 @@ def recv_on_port(parent, index, port):
         try:
             conn, addr = s.accept()
             conn.settimeout(0.1)
-            print("New connection from " + str(addr))
+            print("New connection: " + str(addr))
             parent.set_connected(True)
-            serve(conn)
-            print("Connection closed: " + str(addr))
+            serve(conn, addr)
             conn.close()
         except socket.timeout:
             continue
