@@ -15,6 +15,8 @@ $ python main.py
 
 ### Elevator 1
 
+Reset: F1
+
 | Floor | Hall up | Hall down | Cab |
 |-------|---------|-----------|-----|
 | 3     |         | 2         | 3   |
@@ -24,6 +26,8 @@ $ python main.py
 
 ### Elevator 2
 
+Reset: F2
+
 | Floor | Hall up | Hall down | Cab |
 |-------|---------|-----------|-----|
 | 3     |         | 5         | 6   |
@@ -32,6 +36,8 @@ $ python main.py
 | 0     | V       |           | N   |
 
 ### Elevator 3
+
+Reset: F3
 
 | Floor | Hall up | Hall down | Cab |
 |-------|---------|-----------|-----|
