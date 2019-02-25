@@ -27,6 +27,7 @@ class ElevatorServer():
         self.index = index
         self.active = True
         self.stopped = False
+        self.jammed = False
 
         # Create sprites for floors and orders
         for i in range(4):
@@ -64,18 +65,50 @@ class ElevatorServer():
                 x=x, y=elev_y, batch=self.batch)
         self.signal.visible = False
 
+        self.reset_label = pyglet.sprite.Sprite(Resources.f_button_imgs[index], x+10, elev_y-15, batch=self.batch)
+        self.reset_label.visible = False
+
         # Start the networking thread
         self.thread = Thread(target=recv_on_port, args=(self, index,15657+index,))
         self.thread.start()
 
     def update(self, dt):
-        self.elevator.y += self.elevator.dy * dt
-        self.doors.y += self.elevator.dy * dt
-        self.stop_button.y += self.elevator.dy * dt
-        self.signal.y += self.elevator.dy * dt
+        with self.lock:
+            self.elevator.center = (self.elevator.x + self.elevator.width/2,
+                                    self.elevator.y + self.elevator.height/2 - 15)
 
-        self.elevator.center = (self.elevator.x + self.elevator.width/2,
-                                self.elevator.y + self.elevator.height/2 - 15)
+            if self.elevator.center[1] > (self.floors[3].y + self.floors[3].height) or (self.elevator.center[1] < (self.floors[0].y)):
+                if not self.jammed:
+                    self.reset_label.visible = True
+                    self.jammed = True
+                return
+
+            self.elevator.y += self.elevator.dy * dt
+            self.doors.y += self.elevator.dy * dt
+            self.stop_button.y += self.elevator.dy * dt
+            self.signal.y += self.elevator.dy * dt
+            self.reset_label.y += self.elevator.dy * dt
+
+    def reset(self):
+        if not self.jammed:
+            return
+
+        self.set_motor_direction(0)
+        with self.lock:
+            self.jammed = False
+            self.reset_label.visible = False
+
+            if self.elevator.center[1] > self.floors[3].y:
+                reset_point = self.floors[3].y
+            else:
+                reset_point = self.floors[0].y
+
+            dy = self.elevator.y - reset_point + (self.elevator.center[1] - self.elevator.y)
+            self.elevator.y -= dy
+            self.doors.y -= dy
+            self.stop_button.y -= dy
+            self.signal.y -= dy
+            self.reset_label.y -= dy
 
     def set_motor_direction(self, direction):
         with self.lock:
@@ -213,6 +246,12 @@ class Window(pyglet.window.Window):
     def update(self, dt):
         for elev_serv in self.elevator_servers:
             elev_serv.update(dt)
+
+    def on_key_press(self, symbol, modifiers):
+        for i in range(0,3):
+            if self.keys[Resources.reset_keys[0]]:
+                with self.elevator_servers[0].lock:
+                    self.elevator_servers[0].reset()
 
     def on_draw(self):
         pyglet.clock.tick()

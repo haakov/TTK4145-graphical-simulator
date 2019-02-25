@@ -10,15 +10,13 @@ class Resources():
     arrow_down_img = pyglet.image.load("img/arrow_down.png")
     background_img = pyglet.image.load("img/background.png")
 
-    floor_imgs = [ pyglet.image.load("img/floor_%d.png" % 0),
-                   pyglet.image.load("img/floor_%d.png" % 1),
-                   pyglet.image.load("img/floor_%d.png" % 2),
-                   pyglet.image.load("img/floor_%d.png" % 3) ]
+    floor_imgs = [ pyglet.image.load("img/floor_%d.png" % i) for i in range(0,4) ]
 
-    cab_order_imgs = [ pyglet.image.load("img/%d.png" % 0),
-                       pyglet.image.load("img/%d.png" % 1),
-                       pyglet.image.load("img/%d.png" % 2),
-                       pyglet.image.load("img/%d.png" % 3) ]
+    cab_order_imgs = [ pyglet.image.load("img/%d.png" % i) for i in range(0,4) ]
+
+    f_button_imgs = [ pyglet.image.load("img/f%d.png" % i) for i in range(1,4) ]
+
+    reset_keys = [ key.F1, key.F2, key.F3 ]
 
     order_keys   = [
                     # Elevator 1
