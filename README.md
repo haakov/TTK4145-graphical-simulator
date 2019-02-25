@@ -2,6 +2,12 @@
 
 A _crude_ graphical alternative to TTK4145's elevator simulator.
 
+### TODO: 
+* Stop and Obstruction buttons
+* Manual motor override
+* Command line arguments
+* User-specified amount of elevators and floors
+
 
 ## Usage
 
