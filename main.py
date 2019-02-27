@@ -1,7 +1,7 @@
 import pyglet
 import socket, sys
 import random
-
+import signal
 from pyglet.window import key,mouse
 from threading import Thread, RLock
 
@@ -273,4 +273,11 @@ class Window(pyglet.window.Window):
         self.close()
 
 window = Window()
+
+def handle_sigint(sig, frame):
+    window.on_close()
+    pyglet.app.exit()
+
+signal.signal(signal.SIGINT, handle_sigint)
+
 pyglet.app.run()
