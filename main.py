@@ -254,9 +254,9 @@ class Window(pyglet.window.Window):
 
     def on_key_press(self, symbol, modifiers):
         for i in range(0,3):
-            if self.keys[Resources.reset_keys[0]]:
-                with self.elevator_servers[0].lock:
-                    self.elevator_servers[0].reset()
+            if self.keys[Resources.reset_keys[i]]:
+                with self.elevator_servers[i].lock:
+                    self.elevator_servers[i].reset()
 
     def on_draw(self):
         pyglet.clock.tick()
