@@ -1,6 +1,6 @@
 # TTK4145-graphical-simulator
 
-A _crude_ graphical alternative to TTK4145's elevator simulator.
+A _crude_ graphical alternative to TTK4145's elevator simulator. Written in Python 3 using [Pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home).
 
 ### TODO: 
 * Stop and Obstruction buttons
@@ -14,9 +14,11 @@ A _crude_ graphical alternative to TTK4145's elevator simulator.
 ```
 $ git clone https://github.com/haakov/TTK4145-graphical-simulator
 $ cd TTK4145-graphical-simulator
-$ sudo apt-get install pyglet
-$ python main.py
+$ pip3 install pyglet
+$ python3 main.py
 ```
+
+The simulator will now listen for connections on ports 15657, 15658 and 15659.
 
 
 ### Elevator 1
