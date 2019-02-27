@@ -1,12 +1,16 @@
 import pyglet
-import socket, sys
+import socket
+import sys
 import random
 import signal
+
 from pyglet.window import key,mouse
 from threading import Thread, RLock
 
-
 from resources import Resources
+
+if sys.version_info.major != 3:
+    raise Exception("Please use Python 3")
 
 class ElevatorServer():
     floor_positions = [70, 205, 342, 478]
