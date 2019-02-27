@@ -30,7 +30,6 @@ class ElevatorServer():
         self.window = parent
         self.index = index
         self.active = True
-        self.stopped = False
         self.jammed = False
 
         # Create sprites for floors and orders
@@ -67,7 +66,7 @@ class ElevatorServer():
                 x=x + 5, y=elev_y + 5)
 
         self.stop_button = pyglet.sprite.Sprite(Resources.stop_img,
-                x=x + 8, y=elev_y + 10)
+                x=x + 12, y=elev_y-28, batch=self.batch)
         self.stop_button.visible = False
 
         self.signal = pyglet.sprite.Sprite(Resources.signal_img,
@@ -168,6 +167,12 @@ class ElevatorServer():
     def get_order(self, button_type, floor):
         return self.window.keys[self.order_keys[self.index][button_type][3-floor]]
 
+    def get_stop_button(self):
+        return self.window.keys[Resources.stop_key]
+
+    def get_obstruction_button(self):
+        return self.window.keys[Resources.obstruction_key]
+
 def recv_on_port(parent, index, port):
     def serve(conn, addr):
         while parent.active:
@@ -196,14 +201,17 @@ def recv_on_port(parent, index, port):
                         else:
                             conn.send(bytes([7, 1, floor, 0]))
                     elif (data[0] == 8):
-                        if parent.stopped():
+                        if parent.get_stop_button():
                             conn.send(bytes([8, 1, 0, 0]))
                         else:
                             conn.send(bytes([8, 0, 0, 0]))
                     elif (data[0] == 9):
-                        print("TODO: Implement obstruction")
+                        if parent.get_obstruction_button():
+                            conn.send(bytes([9, 1, 0, 0]))
+                        else:
+                            conn.send(bytes([9, 0, 0, 0]))
                     else:
-                        print("Unknown data received: {}".format(data[0]))
+                        print("Unknown data received: {}".format(data))
 
             except socket.timeout:
                 continue

@@ -17,6 +17,8 @@ class Resources():
     f_button_imgs = [ pyglet.image.load("img/f%d.png" % i) for i in range(1,4) ]
 
     reset_keys = [ key.F1, key.F2, key.F3 ]
+    stop_key = key.ENTER
+    obstruction_key = key.BACKSPACE
 
     ports = [ 15657, 15658, 15659 ]
 
