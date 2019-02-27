@@ -177,7 +177,7 @@ def recv_on_port(parent, index, port):
     def serve(conn, addr):
         while parent.active:
             try:
-                data = conn.recv(buf_size).strip()
+                data = conn.recv(buf_size)
                 if not data:
                     break
                 else:
