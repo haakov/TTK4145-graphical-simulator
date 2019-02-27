@@ -18,6 +18,8 @@ class Resources():
 
     reset_keys = [ key.F1, key.F2, key.F3 ]
 
+    ports = [ 15657, 15658, 15659 ]
+
     order_keys   = [
                     # Elevator 1
                     [[ None, key.Q, key.A, key.Z        ],  # Hall up

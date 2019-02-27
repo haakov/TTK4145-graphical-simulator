@@ -74,7 +74,7 @@ class ElevatorServer():
         self.reset_label.visible = False
 
         # Start the networking thread
-        self.thread = Thread(target=recv_on_port, args=(self, index,15657+index,))
+        self.thread = Thread(target=recv_on_port, args=(self, index, Resources.ports[index],))
         self.thread.start()
 
     def update(self, dt):
