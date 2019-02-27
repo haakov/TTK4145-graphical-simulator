@@ -35,15 +35,20 @@ class ElevatorServer():
                     x=x-30, y=self.floor_positions[i], batch=self.batch))
             self.floors[i].opacity = 80
 
-        for i in range(3):
+        for i in range(4):
             self.hall_up_orders.append(pyglet.sprite.Sprite(Resources.arrow_img,
                     x=x-15, y=self.floor_positions[i]+14, batch=self.batch))
             self.hall_up_orders[i].opacity = 80
 
-        for i in range(1, 4):
+        for i in range(4):
             self.hall_down_orders.append(pyglet.sprite.Sprite(Resources.arrow_down_img,
                     x=x-15, y=self.floor_positions[i]-6, batch=self.batch))
-            self.hall_down_orders[i-1].opacity = 80
+            self.hall_down_orders[i].opacity = 80
+
+        # The following two orders don't really exist,
+        # and are to be considered as dummies
+        self.hall_up_orders[3].visible = False
+        self.hall_down_orders[0].visible = False
 
         for i in range(4):
             self.cab_orders.append(pyglet.sprite.Sprite(Resources.cab_order_imgs[i],
@@ -151,7 +156,7 @@ class ElevatorServer():
                 self.hall_up_orders[floor].opacity = 255 if state else 80
         elif order_type == 1:
             with self.lock:
-                self.hall_down_orders[floor-1].opacity = 255 if state else 80
+                self.hall_down_orders[floor].opacity = 255 if state else 80
         elif order_type == 2:
             with self.lock:
                 self.cab_orders[floor].opacity = 255 if state else 80
