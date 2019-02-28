@@ -3,7 +3,7 @@
 A _crude_ graphical alternative to TTK4145's elevator simulator. Written in Python 3 using [Pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home).
 
 ### TODO: 
-* Stop and Obstruction buttons
+* Stop and Obstruction buttons for single elevators
 * Manual motor override
 * Command line arguments
 * User-specified amount of elevators and floors
@@ -20,6 +20,9 @@ $ python3 main.py
 
 The simulator will now listen for connections on ports 15657, 15658 and 15659.
 
+Stop: Enter
+Obstruction: Backspace
+(These two work on all three elevators simultaneously)
 
 ### Elevator 1
 
